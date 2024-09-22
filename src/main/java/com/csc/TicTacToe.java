@@ -1,4 +1,4 @@
-package main.java.com.csc;
+package com.csc;
 
 import java.util.Scanner;
 
@@ -32,7 +32,7 @@ public class TicTacToe {
      * This function prints out the board
      * @param board, 2D char matrix of game
      */
-    private static void printBoard(char[][] board) {
+    public static void printBoard(char[][] board) {
         System.out.println(board[0][0] + "|" + board[0][1] + "|" + board[0][2]);
         System.out.println("-----");
         System.out.println(board[1][0] + "|" + board[1][1] + "|" + board[1][2]);
@@ -46,7 +46,7 @@ public class TicTacToe {
      * @param board, 2D char matrix of game
      * @return boolean, true or false depending on input
      */
-    private static boolean validateInput(String userInput, char[][] board) {
+    public static boolean validateInput(String userInput, char[][] board) {
         switch(userInput) {
             case "1":
                 return(board[0][0] == ' ');
@@ -76,7 +76,7 @@ public class TicTacToe {
      * @param board, 2D char matrix of game
      * @param scanner, user input
      */
-    private static void playerOneTurn(char[][] board, Scanner scanner) {
+    public static void playerOneTurn(char[][] board, Scanner scanner) {
         String userInput;
         while(true) {
             System.out.println("Which spot on the board do you select? (1-9)");
@@ -96,7 +96,7 @@ public class TicTacToe {
      * @param board, 2D char matrix of game
      * @param scanner, user input
      */
-    private static void playerTwoTurn(char[][] board, Scanner scanner) {
+    public static void playerTwoTurn(char[][] board, Scanner scanner) {
         String userInput;
         while(true) {
             System.out.println("Which spot on the board do you select? (1-9)");
@@ -116,7 +116,7 @@ public class TicTacToe {
      * @param board, 2D char matrix of game
      * @return Who won or tied
      */
-    private static boolean isGameFinished(char[][] board) {
+    public static boolean isGameFinished(char[][] board) {
         
         if(hasContestantWon(board, 'X')) {
             printBoard(board);
@@ -151,7 +151,7 @@ public class TicTacToe {
      * @param char, symbol to check
      * @return true or false, if three in a row of a symbol was found
      */
-    private static boolean hasContestantWon(char[][] board, char symbol) {
+    public static boolean hasContestantWon(char[][] board, char symbol) {
 		if ((board[0][0] == symbol && board [0][1] == symbol && board [0][2] == symbol) ||
 			(board[1][0] == symbol && board [1][1] == symbol && board [1][2] == symbol) ||
 			(board[2][0] == symbol && board [2][1] == symbol && board [2][2] == symbol) ||
@@ -173,7 +173,7 @@ public class TicTacToe {
      * @param position, position to be placed
      * @param symbol, symbol to place at the position
      */
-    private static void placeMove(char[][] board, String position, char symbol) {
+    public static void placeMove(char[][] board, String position, char symbol) {
         switch(position) {
 			case "1":
 				board[0][0] = symbol;
