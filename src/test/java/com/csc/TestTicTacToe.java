@@ -17,26 +17,26 @@ public class TestTicTacToe {
      // Test for validating input
     @Test
     public void testValidateInput_ValidMove() {
-        char[][] board = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-        assertTrue(TicTacToe.validateInput("1", board));
-        assertTrue(TicTacToe.validateInput("9", board));
+        char[][] board = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
+        assertTrue(TicTacToe.validateInput(1, board));
+        assertTrue(TicTacToe.validateInput(9, board));
     }
 
     @Test
     public void testValidateInput_InvalidMove() {
-        char[][] board = {{'X', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-        assertFalse(TicTacToe.validateInput("1", board));  // Already taken spot
-        assertFalse(TicTacToe.validateInput("10", board)); // Invalid input
+        char[][] board = {{'X', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
+        assertFalse(TicTacToe.validateInput(1, board));  // Already taken spot
+        assertFalse(TicTacToe.validateInput(10, board)); // Invalid input
     }
 
     // Test for placing a move
     @Test
     public void testPlaceMove() {
-        char[][] board = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-        TicTacToe.placeMove(board, "1", 'X');
+        char[][] board = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
+        TicTacToe.placeMove(board, 1, 'X');
         assertEquals('X', board[0][0]);
 
-        TicTacToe.placeMove(board, "9", 'O');
+        TicTacToe.placeMove(board, 9, 'O');
         assertEquals('O', board[2][2]);
     }
 
