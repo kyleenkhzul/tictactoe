@@ -102,35 +102,30 @@ public class TicTacToe {
     }
 
     /*
+     * This function maps the position specified by the user to coordinates on the board.
+     * @param position, int
+     * @return row and column, int[]
+     */
+    public static int[] mapPositionToCoordinates(int position) {
+        int row = (position - 1) / 3;
+        int col = (position - 1) % 3;
+        return new int[] {row, col};
+    }
+    
+    /*
      * This function validates userInput
      * @param userInput, String
      * @param board, 2D char matrix of game
      * @return boolean, true or false depending on input
      */
     public static boolean validateInput(int userInput, char[][] board) {
-            switch(userInput) {
-                case 1:
-                    return(board[0][0] == '1');
-                case 2:
-                    return(board[0][1] == '2');    
-                case 3:
-                    return(board[0][2] == '3');    
-                case 4:
-                    return(board[1][0] == '4');
-                case 5:
-                    return(board[1][1] == '5');
-                case 6:
-                    return(board[1][2] == '6');
-                case 7:
-                    return(board[2][0] == '7');
-                case 8:
-                    return(board[2][1] == '8');
-                case 9:
-                    return(board[2][2] == '9');
-                default:
-                    return false;
-            }
+        if (userInput < 1 || userInput > 9) {
+            return false;
         }
+        int[] coordinates = mapPositionToCoordinates(userInput);
+
+        return board[coordinates[0]][coordinates[1]] != 'X' && board[coordinates[0]][coordinates[1]] != 'O';
+    }
     
     /*
      * This function checks if someone has won by checking if either symbols form three across or diagonal
@@ -161,36 +156,7 @@ public class TicTacToe {
      * @param symbol, symbol to place at the position
      */
     public static void placeMove(char[][] board, int position, char symbol) {
-        switch(position) {
-			case 1:
-				board[0][0] = symbol;
-				break;
-			case 2:
-				board[0][1] = symbol;
-				break;
-			case 3:
-				board[0][2] = symbol;
-				break;
-			case 4:
-				board[1][0] = symbol;
-				break;
-			case 5:
-				board[1][1] = symbol;
-				break;
-			case 6:
-				board[1][2] = symbol;
-				break;
-			case 7:
-				board[2][0] = symbol;
-				break;
-			case 8:
-				board[2][1] = symbol;
-				break;
-			case 9:
-				board[2][2] = symbol;
-				break;
-			default:
-				System.out.println("Invalid input, try again.");
-		}
+        int[] coordinates = mapPositionToCoordinates(position);
+        board[coordinates[0]][coordinates[1]] = symbol;
     }
 }
