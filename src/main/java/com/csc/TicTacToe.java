@@ -1,8 +1,6 @@
 package com.csc;
 
 import java.util.Scanner;
-
-
 public class TicTacToe {
     
     public static void main(String[] args) {
@@ -50,7 +48,15 @@ public class TicTacToe {
         int userInput;
         while(true) {
             System.out.println("Which spot on the board do you select? (1-9)");
+
+            // Validates and accounts for non-integer input.
+            while(!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next();
+            }
+
             userInput = scanner.nextInt();
+    
             if(validateInput(userInput, board)) {
                 break;
             }
@@ -102,7 +108,6 @@ public class TicTacToe {
      * @return boolean, true or false depending on input
      */
     public static boolean validateInput(int userInput, char[][] board) {
-        try {
             switch(userInput) {
                 case 1:
                     return(board[0][0] == '1');
@@ -125,13 +130,7 @@ public class TicTacToe {
                 default:
                     return false;
             }
-        } catch (Exception e) {
-            // General exception handling if something unexpected happens
-            System.out.println("An error occurred: " + e.getMessage());
-            return false;
         }
-    }
-    
     
     /*
      * This function checks if someone has won by checking if either symbols form three across or diagonal
