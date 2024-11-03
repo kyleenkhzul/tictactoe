@@ -1,31 +1,114 @@
 package com.csc;
 
+import java.util.Random;
 import java.util.Scanner;
 public class TicTacToe {
     
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        char[][] board = {{'1', '2', '3'},
-                          {'4', '5', '6'},
-                          {'7', '8', '9'}};
+        boolean playAgain;
 
-        printBoard(board);
-        
+        do {
+            System.out.println("Welcome to Tic-Tac-Toe!");
+            int gameMode = mainMenu(scanner);
+
+            char[][] board = {{'1', '2', '3'},
+                              {'4', '5', '6'},
+                              {'7', '8', '9'}};
+
+            printBoard(board);
+            boolean isComputerOpponent = (gameMode == 2);
+
+            while (true) {
+                playerTurn(board, scanner, 'X');
+                if (isGameFinished(board)) {
+                    break;
+                }
+                printBoard(board);
+
+                if (isComputerOpponent) {
+                    computerTurn(board);
+                } else {
+                    playerTurn(board, scanner, 'O');
+                }
+
+                if (isGameFinished(board)) {
+                    break;
+                }
+                printBoard(board);
+            }
+            playAgain = exitMenu(scanner);
+        } while (playAgain);
+
+        System.out.println("Thanks for playing Tic-Tac-Toe! Goodbye!");
+        scanner.close();
+    }
+
+    /*
+     * This function prompts the main menu to select type of game mode
+     * @param Scanner, scanner object to take input
+     * @return int, game choice
+     */
+    public static int mainMenu(Scanner scanner) {
+        int choice;
         while (true) {
-			playerTurn(board, scanner, 'X');
-			if (isGameFinished(board)){
-				break;
-			}
-			printBoard(board);
-			
-			playerTurn(board, scanner, 'O');
-			if (isGameFinished(board)){
-				break;
-			}
-			printBoard(board);
-		}
-		scanner.close();
-	}
+            System.out.println("Select an option:");
+            System.out.println("1. Human vs Human");
+            System.out.println("2. Human vs Computer");
+            System.out.print("Enter choice (1 or 2): ");
+
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter 1 or 2.");
+                scanner.next();
+                continue;
+            }
+
+            choice = scanner.nextInt();
+            if (choice == 1 || choice == 2) {
+                return choice;
+            } else {
+                System.out.println("Invalid choice. Please enter 1 or 2.");
+            }
+        }
+    }
+
+    /*
+     * This function prompts the exit menu for when a game is finished
+     * @param Scanner, scanner object to take input
+     * @return boolean, to determine yes or no
+     */
+    public static boolean exitMenu(Scanner scanner) {
+        String choice;
+        while (true) {
+            System.out.println("Would you like to play again? (yes or no): ");
+            choice = scanner.next().toLowerCase();
+
+            if (choice.equals("yes")) {
+                return true;
+            } else if (choice.equals("no")) {
+                return false;
+            } else {
+                System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+            }
+        }
+    }
+
+    /*
+     * This function makes a random Computer move
+     * @param board, 2D char matrix of game
+     */
+     public static void computerTurn(char[][] board) {
+        Random random = new Random();
+        int move;
+        while (true) {
+            move = random.nextInt(9) + 1;
+            if (validateInput(move, board)) {
+                System.out.println("Computer chooses spot " + move);
+                placeMove(board, move, 'O');
+                break;
+            }
+        }
+    }
 
     /*
      * This function prints out the board
@@ -52,7 +135,7 @@ public class TicTacToe {
             // Validates and accounts for non-integer input.
             while(!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Please enter an integer.");
-                scanner.next();
+                scanner.nextLine();
             }
 
             userInput = scanner.nextInt();
