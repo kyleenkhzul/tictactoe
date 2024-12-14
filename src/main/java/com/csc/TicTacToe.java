@@ -12,6 +12,8 @@ public class TicTacToe {
             System.out.println("Welcome to Tic-Tac-Toe!");
             int gameMode = mainMenu(scanner);
 
+            char playerOneMark = getCustomMark(scanner, "Player One");
+            char playerTwoMark = (gameMode == 2) ? getCustomMark(scanner, "Computer") : getCustomMark(scanner, "Player Two");
             char[][] board = {{'1', '2', '3'},
                               {'4', '5', '6'},
                               {'7', '8', '9'}};
@@ -20,19 +22,19 @@ public class TicTacToe {
             boolean isComputerOpponent = (gameMode == 2);
 
             while (true) {
-                playerTurn(board, scanner, 'X');
-                if (isGameFinished(board)) {
+                playerTurn(board, scanner, playerOneMark, playerOneMark, playerTwoMark);
+                if (isGameFinished(board, playerOneMark, playerTwoMark)) {
                     break;
                 }
                 printBoard(board);
 
                 if (isComputerOpponent) {
-                    computerTurn(board);
+                    computerTurn(board, playerTwoMark, playerOneMark, playerTwoMark);
                 } else {
-                    playerTurn(board, scanner, 'O');
+                    playerTurn(board, scanner, playerTwoMark, playerOneMark, playerTwoMark);
                 }
 
-                if (isGameFinished(board)) {
+                if (isGameFinished(board, playerOneMark, playerTwoMark)) {
                     break;
                 }
                 printBoard(board);
@@ -64,6 +66,7 @@ public class TicTacToe {
             }
 
             choice = scanner.nextInt();
+            scanner.nextLine();
             if (choice == 1 || choice == 2) {
                 return choice;
             } else {
@@ -94,17 +97,39 @@ public class TicTacToe {
     }
 
     /*
+     * This function gets the custom mark from the user
+     * @param Scanner, scanner object to take input
+     * @String playerName, name of player
+     * @return string, custom player mark
+     */
+    public static char getCustomMark(Scanner scanner, String playerName) {
+        String mark;
+        while (true) {
+            System.out.println(playerName + ", please choose a custom mark (one character only, no spaces): ");
+            mark = scanner.nextLine().trim();
+
+            if (mark.length() == 1 && !Character.isWhitespace(mark.charAt(0))) {
+                return mark.charAt(0);
+            } else {
+                System.out.println("Invalid mark. The mark must be exactly one character and cannot be a whitespace. Please try again.");
+            }
+        }
+    }
+
+    /*
      * This function makes a random Computer move
      * @param board, 2D char matrix of game
+     * @param playerOneMark, custom mark for player one
+     * @param playerTwoMark, custom mark for player two
      */
-     public static void computerTurn(char[][] board) {
+    public static void computerTurn(char[][] board, char symbol, char playerOneMark, char playerTwoMark) {
         Random random = new Random();
         int move;
         while (true) {
             move = random.nextInt(9) + 1;
-            if (validateInput(move, board)) {
+            if (validateInput(move, board, playerOneMark, playerTwoMark)) {
                 System.out.println("Computer chooses spot " + move);
-                placeMove(board, move, 'O');
+                placeMove(board, move, symbol);
                 break;
             }
         }
@@ -126,21 +151,23 @@ public class TicTacToe {
      * This function does a player's turn
      * @param board, 2D char matrix of game
      * @param scanner, user input
+     * @param playerOneMark, custom mark for player one
+     * @param playerTwoMark, custom mark for player two
      */
-    public static void playerTurn(char[][] board, Scanner scanner, char symbol) {
+    public static void playerTurn(char[][] board, Scanner scanner, char symbol, char playerOneMark, char playerTwoMark) {
         int userInput;
         while(true) {
             System.out.println("Which spot on the board do you select? (1-9)");
 
-            // Validates and accounts for non-integer input.
             while(!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Please enter an integer.");
+                scanner.next();
                 scanner.nextLine();
             }
 
             userInput = scanner.nextInt();
     
-            if(validateInput(userInput, board)) {
+            if(validateInput(userInput, board, playerOneMark, playerTwoMark)) {
                 break;
             }
             else {
@@ -153,18 +180,19 @@ public class TicTacToe {
     /*
      * This function checks if anyone has won or tied.
      * @param board, 2D char matrix of game
+     * @param playerOneMark, custom mark for player one
+     * @param playerTwoMark, custom mark for player two
      * @return Who won or tied
      */
-    public static boolean isGameFinished(char[][] board) {
-        
-        if(hasContestantWon(board, 'X')) {
+    public static boolean isGameFinished(char[][] board, char playerOneMark, char playerTwoMark) {
+        if(hasContestantWon(board, playerOneMark)) {
             printBoard(board);
             System.out.println("Player One Wins!");
             System.out.println("Have a good day!");
             return true;
         }
 
-        if(hasContestantWon(board, 'O')) {
+        if(hasContestantWon(board, playerTwoMark)) {
             printBoard(board);
             System.out.println("Player Two Wins!");
             System.out.println("Have a good day!");
@@ -173,7 +201,7 @@ public class TicTacToe {
 
         for(int i = 0; i < board.length; i++) {
             for(int j = 0; j < board[i].length; j++) {
-                if(board[i][j] != 'X' && board[i][j] != 'O') { 
+                if(board[i][j] != playerOneMark && board[i][j] != playerTwoMark) { 
                     return false;
                 }
             }
@@ -199,17 +227,19 @@ public class TicTacToe {
      * This function validates userInput
      * @param userInput, String
      * @param board, 2D char matrix of game
+     * @param playerOneMark, custom mark for player one
+     * @param playerTwoMark, custom mark for player two
      * @return boolean, true or false depending on input
      */
-    public static boolean validateInput(int userInput, char[][] board) {
+    public static boolean validateInput(int userInput, char[][] board, char playerOneMark, char playerTwoMark) {
         if (userInput < 1 || userInput > 9) {
             return false;
         }
         int[] coordinates = mapPositionToCoordinates(userInput);
 
-        return board[coordinates[0]][coordinates[1]] != 'X' && board[coordinates[0]][coordinates[1]] != 'O';
+        return board[coordinates[0]][coordinates[1]] != playerOneMark && board[coordinates[0]][coordinates[1]] != playerTwoMark;
     }
-    
+
     /*
      * This function checks if someone has won by checking if either symbols form three across or diagonal
      * @param board, 2D char matrix of game
